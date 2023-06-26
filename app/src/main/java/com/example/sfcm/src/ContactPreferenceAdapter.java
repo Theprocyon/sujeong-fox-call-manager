@@ -59,7 +59,7 @@ public class ContactPreferenceAdapter extends RecyclerView.Adapter<ContactPrefer
 
                 //TODO
                 final Dialog dialog = new Dialog(context);
-                dialog.setContentView(R.layout.dialog_edit_contact);
+                dialog.setContentView(R.layout.dialog_new_contact);
 
                 int width = WindowManager.LayoutParams.MATCH_PARENT;
                 int height = WindowManager.LayoutParams.WRAP_CONTENT;
@@ -68,7 +68,7 @@ public class ContactPreferenceAdapter extends RecyclerView.Adapter<ContactPrefer
 
                 dialog.show();
 
-                final EditText editText = dialog.findViewById(R.id.dialog_edit_phone_num);
+                EditText editText = dialog.findViewById(R.id.et_phone_number);
                 Button btSave = dialog.findViewById(R.id.bt_save);
 
                 editText.setText(sText);
@@ -102,6 +102,9 @@ public class ContactPreferenceAdapter extends RecyclerView.Adapter<ContactPrefer
             @Override
             public void onClick(View v)
             {
+                //notready
+                if (holder.getAdapterPosition() == RecyclerView.NO_POSITION) return;
+
                 ContactPreference mainData = dataList.get(holder.getAdapterPosition());
 
                 database.mainDao().delete(mainData);
@@ -120,16 +123,6 @@ public class ContactPreferenceAdapter extends RecyclerView.Adapter<ContactPrefer
         return dataList.size();
     }
 
-    public void deleteByIndex(int pos) {
-
-    }
-
-    public void insert(ContactPreference pref) {
-        database.mainDao().insert(pref);
-        dataList.clear();
-        dataList.addAll(database.mainDao().getAll());
-        this.notifyDataSetChanged();
-    }
     public class ViewHolder extends RecyclerView.ViewHolder
     {
         TextView textView;

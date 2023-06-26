@@ -1,29 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_margin="8dp">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Edit"
-        />
-    <EditText
-        android:id="@+id/dialog_edit_phone_num"
+        android:layout_height="match_parent"
+        android:background="#AA444444"
+        android:gravity="center_horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="Enter Contact Info"
+        android:textSize="20sp" />
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="+821011112222"
-        android:padding="12dp"
-        android:lines="4"
-        android:gravity="top"/>
+        android:layout_height="60dp"
+        android:background="#AAFFFFFF"
+        android:padding="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:gravity="center_vertical"
+            android:text="name  :"
+            android:textColor="#FF000000"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/et_name"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:gravity="right|center_vertical"
+            android:hint="신수정"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:lines="1"
+            android:singleLine="true"
+            android:textColor="#FF000000"
+            android:textColorHint="#99AAAAAA"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#AAFFFFFF"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:gravity="center_vertical"
+            android:text="Phone :"
+            android:textColor="#FF000000"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/et_phone_number"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:gravity="right|center_vertical"
+            android:hint="01000000000"
+            android:imeOptions="actionSearch"
+            android:inputType="phone"
+            android:lines="1"
+            android:singleLine="true"
+            android:textColor="#FF000000"
+            android:textColorHint="#99AAAAAA"
+            android:textSize="20sp" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/bt_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="8dp"
+        android:text="Save" />
 
 </LinearLayout>

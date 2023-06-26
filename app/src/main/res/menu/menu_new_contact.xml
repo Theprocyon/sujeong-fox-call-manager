@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.sfcm.MainActivity">
+    <item
+        android:id="@+id/menu_new_contact_import"
+        android:orderInCategory="100"
+        android:title="@string/string_menu_new_contact_import"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_new_contact_custom"
+        android:orderInCategory="100"
+        android:title="@string/string_menu_new_contact_custom"
+        app:showAsAction="never" />
+</menu>

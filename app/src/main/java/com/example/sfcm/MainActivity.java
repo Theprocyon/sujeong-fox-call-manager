@@ -2,27 +2,30 @@ package com.example.sfcm;
 
 import android.os.Bundle;
 
-import com.google.android.material.snackbar.Snackbar;
+import com.example.sfcm.src.ContactPreferenceAdapter;
+import com.example.sfcm.src.db.ContactPreference;
+import com.example.sfcm.src.db.ContactPreferenceDB;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
 
-import androidx.core.view.WindowCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.sfcm.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
 
-    private AppBarConfiguration appBarConfiguration;
+public class MainActivity extends AppCompatActivity {
+    public static final String TAG = MainActivity.class.getSimpleName();
     private ActivityMainBinding binding;
+    private List<ContactPreference> dataList = new ArrayList<>();
+    private ContactPreferenceDB database;
+    private ContactPreferenceAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,19 +33,24 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        database = ContactPreferenceDB.getInstance(this);
+        dataList = database.mainDao().getAll();
 
         setSupportActionBar(binding.toolbar);
-//
-//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-//        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new ContactPreferenceAdapter(this, dataList);
+        binding.recyclerView.setAdapter(adapter);
 
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show();
+                ContactPreference data = new ContactPreference();
+                data.name = "asdf";
+                data.phone = "asdf2";
+                database.mainDao().insert(data);
+                dataList.clear();
+                dataList.addAll(database.mainDao().getAll());
+                adapter.notifyDataSetChanged();
             }
         });
     }

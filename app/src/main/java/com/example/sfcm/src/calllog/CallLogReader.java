@@ -1,9 +1,11 @@
-package com.example.sfcm.src;
+package com.example.sfcm.src.calllog;
 
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.CallLog;
+
+import com.example.sfcm.src.calllog.CallLogElem;
 
 import java.util.ArrayList;
 import java.util.List;

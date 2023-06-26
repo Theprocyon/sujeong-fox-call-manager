@@ -1,4 +1,4 @@
-package com.example.sfcm.src;
+package com.example.sfcm.src.calllog;
 
 public class CallLogElem {
     public final String number;

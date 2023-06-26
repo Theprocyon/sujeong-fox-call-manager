@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
-import com.example.sfcm.src.CallLogElem;
-import com.example.sfcm.src.CallLogReader;
+import com.example.sfcm.src.calllog.CallLogElem;
+import com.example.sfcm.src.calllog.CallLogReader;
 import java.util.List;
 
 public class OnRcvCallBroadcastReceiver extends BroadcastReceiver {

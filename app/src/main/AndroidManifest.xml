@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".receiver.OnRcvCallBroadcastReceiver"
+        <receiver android:name=".receiver.OnCallEventBroadcastReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />

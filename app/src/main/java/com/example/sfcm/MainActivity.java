@@ -34,10 +34,19 @@ import android.widget.Toast;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
+
+    //TODO thep : Parse Menifest;
+    private final Set<String> permissions = Set.of(
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.READ_CALL_LOG
+    );
+
     private static final int READ_CONTACTS = 0;
     private ActivityMainBinding binding;
     private List<ContactPreference> dataList = new ArrayList<>();
@@ -173,13 +182,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean hasContactPermission() {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == (PackageManager.PERMISSION_GRANTED);
+        if (permissions == null) return true;
+
+        boolean noPermission = false;
+
+        for (String i : permissions){
+            noPermission |= !(ContextCompat.checkSelfPermission(this,i) == PackageManager.PERMISSION_GRANTED);
+        }
+        return !noPermission;
     }
 
     private void requestContactsPermission() {
-        String[] permission = {Manifest.permission.READ_CONTACTS};
+        if (permissions == null) return;
         ActivityCompat.requestPermissions(this,
-                permission, READ_CONTACTS);
+                permissions.toArray(new String[0]), READ_CONTACTS);
     }
 
     private void launchActivityToPickContact() {

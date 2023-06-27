@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sfcm.R;
+import com.example.sfcm.databinding.CardviewContactBinding;
+import com.example.sfcm.databinding.DialogNewContactBinding;
 import com.example.sfcm.src.db.ContactPreference;
 import com.example.sfcm.src.db.ContactPreferenceDB;
 
@@ -37,84 +39,14 @@ public class ContactPreferenceAdapter extends RecyclerView.Adapter<ContactPrefer
     @Override
     public ContactPreferenceAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_contact, parent, false);
-        return new ViewHolder(view);
+        CardviewContactBinding b = CardviewContactBinding.inflate(LayoutInflater.from(parent.getContext()),parent,false);
+        return new ViewHolder(b);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ContactPreferenceAdapter.ViewHolder holder, int position)
     {
-        final ContactPreference data = dataList.get(position);
-        database = ContactPreferenceDB.getInstance(context);
-        holder.textView.setText(data.name);
-        holder.btEdit.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                ContactPreference contactPref = dataList.get(holder.getAdapterPosition());
-
-                final int sID = contactPref.id;
-                String sText = contactPref.name;
-
-                //TODO
-                final Dialog dialog = new Dialog(context);
-                dialog.setContentView(R.layout.dialog_new_contact);
-
-                int width = WindowManager.LayoutParams.MATCH_PARENT;
-                int height = WindowManager.LayoutParams.WRAP_CONTENT;
-
-                dialog.getWindow().setLayout(width, height);
-
-                dialog.show();
-
-                EditText editText = dialog.findViewById(R.id.et_phone_number);
-                Button btSave = dialog.findViewById(R.id.bt_save);
-
-                editText.setText(sText);
-
-                btSave.setOnClickListener(new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        dialog.dismiss();
-                        String uText = editText.getText().toString().trim();
-
-                        ContactPreference prefToEdit = database.mainDao().getById(sID);
-
-                        prefToEdit.name = uText;
-
-                        database.mainDao().insert(prefToEdit);
-
-                        dataList.clear();
-                        dataList.addAll(database.mainDao().getAll());
-
-                        notifyDataSetChanged();
-                    }
-                });
-            }
-        });
-
-
-        holder.btDelete.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                //notready
-                if (holder.getAdapterPosition() == RecyclerView.NO_POSITION) return;
-
-                ContactPreference mainData = dataList.get(holder.getAdapterPosition());
-
-                database.mainDao().delete(mainData);
-
-                int position = holder.getAdapterPosition();
-                dataList.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, dataList.size());
-            }
-        });
+        holder.bindItem(dataList.get(position), position);
     }
 
     @Override
@@ -125,15 +57,83 @@ public class ContactPreferenceAdapter extends RecyclerView.Adapter<ContactPrefer
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {
-        TextView textView;
-        ImageView btEdit, btDelete;
+        CardviewContactBinding itemBinding;
 
-        public ViewHolder(@NonNull View view)
+        public ViewHolder(@NonNull CardviewContactBinding binding)
         {
-            super(view);
-            textView = view.findViewById(R.id.tv_name);
-            btEdit = view.findViewById(R.id.bt_edit);
-            btDelete = view.findViewById(R.id.bt_delete);
+            super(binding.getRoot());
+            itemBinding = binding;
+        }
+
+        public void bindItem(ContactPreference item, int position) {
+
+            final ContactPreference data = item;
+
+            database = ContactPreferenceDB.getInstance(context);
+            itemBinding.tvName.setText(data.name);
+            itemBinding.btEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ContactPreference contactPref = dataList.get(position);
+
+                    final int sID = contactPref.id;
+                    String sText = contactPref.name;
+
+                    final Dialog dialog = new Dialog(context);
+                    DialogNewContactBinding binding = DialogNewContactBinding.inflate(context.getLayoutInflater());
+                    dialog.setContentView(binding.getRoot());
+
+                    int width = WindowManager.LayoutParams.MATCH_PARENT;
+                    int height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+                    dialog.getWindow().setLayout(width, height);
+
+                    EditText editText = binding.etPhoneNumber;
+                    Button btSave = binding.btSave;
+
+                    editText.setText(sText);
+
+                    dialog.show();
+
+                    btSave.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                            String uText = editText.getText().toString().trim();
+
+                            ContactPreference prefToEdit = contactPref;
+
+                            prefToEdit.name = uText;
+
+                            database.mainDao().insert(prefToEdit);
+
+                            dataList.clear();
+                            dataList.addAll(database.mainDao().getAll());
+
+                            notifyDataSetChanged();
+                        }
+                    });
+                }
+            });
+
+
+            itemBinding.btDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //notready
+                    if (getAdapterPosition() == RecyclerView.NO_POSITION) return;
+
+                    final int pos = getAdapterPosition();
+
+                    ContactPreference mainData = dataList.get(pos);
+
+                    database.mainDao().delete(mainData);
+
+                    dataList.remove(pos);
+                    notifyItemRemoved(pos);
+                    notifyItemRangeChanged(pos, dataList.size());
+                }
+            });
         }
     }
 }

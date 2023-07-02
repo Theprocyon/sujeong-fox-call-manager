@@ -8,9 +8,18 @@ import java.util.List;
 import java.util.Optional;
 
 public class ContactFilter {
-    public class IncomingCallInfo{
 
-    }
+    //TODO Hyeon : For future extension
+//    public class IncomingCallInfo{
+//        private final String phoneNumber;
+//        public IncomingCallInfo(String pn){
+//            phoneNumber = pn;
+//        }
+//
+//        public String getPhoneNumber(){
+//            return this.phoneNumber;
+//        }
+//    }
     List<ContactPreference> contactList;
 
     public ContactFilter(ContactPreferenceDB database) {
@@ -19,7 +28,7 @@ public class ContactFilter {
         }
     }
 
-    public Optional<ContactPreference> filter(IncomingCallInfo info) {
+    public Optional<ContactPreference> filter(String pn) {
         return null;
     }
 

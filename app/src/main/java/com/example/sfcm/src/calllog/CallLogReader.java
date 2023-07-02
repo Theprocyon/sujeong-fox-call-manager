@@ -3,22 +3,24 @@ package com.example.sfcm.src.calllog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Bundle;
 import android.provider.CallLog;
-
-import com.example.sfcm.src.calllog.CallLogElem;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CallLogReader {
+    public static final String TAG = CallLogReader.class.getSimpleName();
+    public static final int CALLLOG_READ_LIMIT = 10;
 
     CallLogReader() {
     }
 
-    public static List<CallLogElem> fetch(Context _context, int limit) {
+    public static List<CallLogElem> fetch(Context _context) {
         ContentResolver resolver = _context.getContentResolver();
 
-        Cursor cursor = getCursor(resolver, limit);
+        Cursor cursor = getCursor(resolver, CALLLOG_READ_LIMIT);
 
         cursor.moveToFirst();
 
@@ -44,18 +46,20 @@ public class CallLogReader {
         return container;
     }
 
+
     private static Cursor getCursor(ContentResolver resolver, int limit) {
 
-        String sortOrder = android.provider.CallLog.Calls.DATE + " DESC limit " + limit;
+        Bundle queryArgs = new Bundle();
+        queryArgs.putInt(ContentResolver.QUERY_ARG_OFFSET, 0);
+        queryArgs.putInt(ContentResolver.QUERY_ARG_LIMIT, limit);
 
         return resolver.query(
                 android.provider.CallLog.Calls.CONTENT_URI,
                 new String[]{android.provider.CallLog.Calls.NUMBER,
                         android.provider.CallLog.Calls.TYPE,
                         android.provider.CallLog.Calls.DATE},
-                null,
-                null,
-                sortOrder
+                queryArgs,
+                null
         );
     }
 }

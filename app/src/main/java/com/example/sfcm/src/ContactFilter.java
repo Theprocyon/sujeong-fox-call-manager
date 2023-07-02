@@ -22,4 +22,15 @@ public class ContactFilter {
     public Optional<ContactPreference> filter(IncomingCallInfo info) {
         return null;
     }
+
+    //TODO Hyeon : Temp
+    public boolean contains(String pn) {
+        boolean ret = false;
+
+        for(ContactPreference i : contactList){
+            ret |= i.phone.equals(pn);
+        }
+
+        return ret;
+    }
 }

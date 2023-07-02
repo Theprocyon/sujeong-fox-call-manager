@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.example.sfcm.src.ContactFilter;
 import com.example.sfcm.src.ContactPreferenceAdapter;
 import com.example.sfcm.src.db.ContactPreference;
 import com.example.sfcm.src.db.ContactPreferenceDB;
@@ -93,17 +94,23 @@ public class MainActivity extends AppCompatActivity {
                                     cursor2.moveToFirst();
                                     phoneNumber = cursor2.getString(cursor2.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-                                    ContactPreference contact = new ContactPreference();
-                                    contact.name = contactName;
-                                    contact.phone = phoneNumber;
-                                    contact.enabled = true;
-                                    contact.intervalTime = 300;
-                                    contact.missingCallCount = 2;
+                                    ContactFilter filter = new ContactFilter(database);
 
-                                    database.mainDao().insert(contact);
-                                    dataList.clear();
-                                    dataList.addAll(database.mainDao().getAll());
-                                    updateRecyclerView();
+                                    if(!filter.contains(phoneNumber)){
+
+                                        ContactPreference contact = new ContactPreference();
+                                        contact.name = contactName;
+                                        contact.phone = phoneNumber;
+                                        contact.enabled = true;
+                                        contact.intervalTime = 300;
+                                        contact.missingCallCount = 2;
+
+                                        database.mainDao().insert(contact);
+                                        dataList.clear();
+                                        dataList.addAll(database.mainDao().getAll());
+                                        updateRecyclerView();
+                                    }
+
                                 } else {
                                     Toast.makeText(this, "Selected contact doesn't have phone number.", Toast.LENGTH_SHORT);
                                 }

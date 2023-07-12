@@ -41,8 +41,9 @@ public class OnCallEventBroadcastReceiver extends BroadcastReceiver {
 
                 String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
 
-                //final String phone_number = incomingNumber;
-                final String phone_number = PhoneNumberUtils.formatNumber(incomingNumber, Locale.getDefault().getCountry());
+                final String phone_number = incomingNumber;
+                //final String phone_number = PhoneNumberUtils.formatNumber(incomingNumber, Locale.getDefault().getCountry());
+
                 ContactPreferenceDB database = ContactPreferenceDB.getInstance(context);
 
                 //TODO Hyeon : Make DATABASE Cache and check Database updatetime.

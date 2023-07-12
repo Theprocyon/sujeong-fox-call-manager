@@ -26,13 +26,13 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.sfcm.databinding.ActivityMainBinding;
+import com.google.common.collect.ImmutableSet;
 
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -41,12 +41,12 @@ import java.util.concurrent.CompletableFuture;
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
 
-    //TODO thep : Parse Menifest;
-    private final Set<String> permissions = Set.of(
-            Manifest.permission.READ_CONTACTS,
-            Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.READ_CALL_LOG
-    );
+    //TODO thep : Parse Menifest xml;
+    private final ImmutableSet<String> permissions = new ImmutableSet.Builder<String>()
+            .add(Manifest.permission.READ_CONTACTS)
+            .add(Manifest.permission.READ_PHONE_STATE)
+            .add(Manifest.permission.READ_CALL_LOG)
+            .build();
 
     private static final int READ_CONTACTS = 0;
     private ActivityMainBinding binding;
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
                                     ContactFilter filter = new ContactFilter(database);
 
-                                    if(!filter.contains(phoneNumber)){
+                                    if (!filter.contains(phoneNumber)) {
 
                                         ContactPreference contact = new ContactPreference();
                                         contact.name = contactName;
@@ -138,32 +138,28 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ContactPreferenceAdapter(this, dataList);
         binding.recyclerView.setAdapter(adapter);
 
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final PopupMenu popup = new PopupMenu(getApplicationContext(), view);
-                getMenuInflater().inflate(R.menu.menu_new_contact, popup.getMenu());
+        binding.fab.setOnClickListener((view) -> {
+            final PopupMenu popup = new PopupMenu(getApplicationContext(), view);
+            getMenuInflater().inflate(R.menu.menu_new_contact, popup.getMenu());
 
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        if (menuItem.getItemId() == R.id.menu_new_contact_import) {
-
-                            launchActivityToPickContact();
-
-                        } else if (menuItem.getItemId() == R.id.menu_new_contact_custom) {
-
-                            openEditorDialog(null);
-
-                        }
-                        return false;
-                    }
-                });
-
-                popup.show();
-            }
+            popup.setOnMenuItemClickListener((menuItem) -> {
+                if (menuItem.getItemId() == R.id.menu_new_contact_import) {
+                    launchActivityToPickContact();
+                    return true;
+                }
+                if (menuItem.getItemId() == R.id.menu_new_contact_custom) {
+                    openEditorDialog(null);
+                    return true;
+                }
+                return false;
+            });
+            popup.show();
         });
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         if (!hasContactPermission()) {
             requestContactsPermission();
         }
@@ -193,8 +189,8 @@ public class MainActivity extends AppCompatActivity {
 
         boolean noPermission = false;
 
-        for (String i : permissions){
-            noPermission |= !(ContextCompat.checkSelfPermission(this,i) == PackageManager.PERMISSION_GRANTED);
+        for (String i : permissions) {
+            noPermission |= !(ContextCompat.checkSelfPermission(this, i) == PackageManager.PERMISSION_GRANTED);
         }
         return !noPermission;
     }
@@ -220,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-    private void openEditorDialog(ContactPreference preference){
+    private void openEditorDialog(ContactPreference preference) {
 
     }
 }

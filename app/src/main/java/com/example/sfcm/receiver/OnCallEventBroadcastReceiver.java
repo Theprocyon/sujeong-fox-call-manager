@@ -51,6 +51,8 @@ public class OnCallEventBroadcastReceiver extends BroadcastReceiver {
                 ContactFilter cf = new ContactFilter(database);
                 List<CallLogElem> log = CallLogReader.fetch(context);
 
+                Log.d(TAG, "Size is " + log.size());
+
                 if (cf.contains(phone_number)) {
                     Log.d(TAG, "db contains phone number !! : " + phone_number);
                     //CallLogReader.fetch(context);

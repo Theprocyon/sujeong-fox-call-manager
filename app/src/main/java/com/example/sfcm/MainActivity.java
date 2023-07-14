@@ -19,14 +19,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.provider.ContactsContract;
 import android.util.Log;
-import android.view.View;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.sfcm.databinding.ActivityMainBinding;
-import com.google.common.collect.ImmutableSet;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,11 +40,11 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
 
     //TODO thep : Parse Menifest xml;
-    private final ImmutableSet<String> permissions = new ImmutableSet.Builder<String>()
-            .add(Manifest.permission.READ_CONTACTS)
-            .add(Manifest.permission.READ_PHONE_STATE)
-            .add(Manifest.permission.READ_CALL_LOG)
-            .build();
+
+    private final Set<String> permissions = Set.of(
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.READ_CALL_LOG,
+            Manifest.permission.READ_CONTACTS);
 
     private static final int READ_CONTACTS = 0;
     private ActivityMainBinding binding;

@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private ContactPreferenceAdapter adapter;
 
     //TODO thep : Add consturctor that parses the menifest xml..;
-    private PermissionManager mPermissionManager = new PermissionManager(this, Set.of(
+    private final PermissionManager mPermissionManager = new PermissionManager(this, Set.of(
             Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.READ_CALL_LOG,
             Manifest.permission.READ_CONTACTS));
@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void onActivityResult(ActivityResult result)s{
+    private void onActivityResult(ActivityResult result){
         {
             if (result.getResultCode() == Activity.RESULT_OK) {
 
@@ -149,10 +149,16 @@ public class MainActivity extends AppCompatActivity {
                     String contactName;
                     String phoneNumber;
                     Intent data = result.getData();
+
+                    if (data == null) {
+                        Toast.makeText(this, "No Contact Data", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     Uri contactData = data.getData();
 
                     if (contactData == null) {
-                        Toast.makeText(this, "No Contact Data", Toast.LENGTH_SHORT);
+                        Toast.makeText(this, "No Contact Data", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
@@ -177,7 +183,10 @@ public class MainActivity extends AppCompatActivity {
                                 );
 
                                 cursor2.moveToFirst();
+
                                 phoneNumber = cursor2.getString(cursor2.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+                                cursor2.close();
 
                                 ContactFilter filter = new ContactFilter(database);
 
@@ -197,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
 
                             } else {
-                                Toast.makeText(this, "Selected contact doesn't have phone number.", Toast.LENGTH_SHORT);
+                                Toast.makeText(this, "Selected contact doesn't have phone number.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     } catch (IllegalArgumentException e) {
